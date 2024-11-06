@@ -17,15 +17,22 @@ public class GameLoop implements Runnable {
     @Override
     public void run() {
         prevTime = System.currentTimeMillis();
+        deltaTime = 1;
+
+        long lastDelta = System.nanoTime();
+        long nanoSec = 1_000_000_000;
+
+
         while (!stop) {
 
-            deltaTime = (System.currentTimeMillis() - prevTime);
-            prevTime = System.currentTimeMillis();
+            long nowDelta = System.nanoTime();
+            long timeSinceLastDelta = nowDelta - lastDelta;
+            deltaTime = (double)timeSinceLastDelta / (double)nanoSec;
 
             gamePanel.update(deltaTime);
             gamePanel.render();
 
-            System.out.println(deltaTime);
+            lastDelta = nowDelta;
         }
     }
 
